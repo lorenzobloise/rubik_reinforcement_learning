@@ -1,7 +1,55 @@
-import utils
 import copy
 
 class Rubik(object):
+
+    WHITE = 0
+    RED = 1
+    GREEN = 2
+    ORANGE = 3
+    BLUE = 4
+    YELLOW = 5
+
+    COLORS = [WHITE, RED, GREEN, ORANGE, BLUE, YELLOW]
+    COLOR_LEGEND = ["WHITE", "RED", "GREEN", "ORANGE", "BLUE", "YELLOW"]
+
+    CONFIGURATIONS = {
+        # (front, top): [back, bottom, left, right]     # n
+        (RED, WHITE): [ORANGE, YELLOW, GREEN, BLUE],    # 1
+        (BLUE, WHITE): [GREEN, YELLOW, RED, ORANGE],    # 2
+        (ORANGE, WHITE): [RED, YELLOW, BLUE, GREEN],    # 3
+        (GREEN, WHITE): [BLUE, YELLOW, ORANGE, RED],    # 4
+        (RED, YELLOW): [ORANGE, WHITE, BLUE, GREEN],    # 5
+        (GREEN, YELLOW): [BLUE, WHITE, RED, ORANGE],    # 6
+        (ORANGE, YELLOW): [RED, WHITE, GREEN, BLUE],    # 7
+        (BLUE, YELLOW): [GREEN, WHITE, ORANGE, RED],    # 8
+        (WHITE, ORANGE): [YELLOW, RED, GREEN, BLUE],    # 9
+        (BLUE, ORANGE): [GREEN, RED, WHITE, YELLOW],    # 10
+        (YELLOW, ORANGE): [WHITE, RED, BLUE, GREEN],    # 11
+        (GREEN, ORANGE): [BLUE, RED, YELLOW, WHITE],    # 12
+        (WHITE, RED): [YELLOW, ORANGE, BLUE, GREEN],    # 13
+        (GREEN, RED): [BLUE, ORANGE, WHITE, YELLOW],    # 14
+        (YELLOW, RED): [WHITE, ORANGE, GREEN, BLUE],    # 15
+        (BLUE, RED): [GREEN, ORANGE, YELLOW, WHITE],    # 16
+        (WHITE, BLUE): [YELLOW, GREEN, ORANGE, RED],    # 17
+        (RED, BLUE): [ORANGE, GREEN, WHITE, YELLOW],    # 18
+        (YELLOW, BLUE): [WHITE, GREEN, RED, ORANGE],    # 19
+        (ORANGE, BLUE): [RED, GREEN, YELLOW, WHITE],    # 20
+        (WHITE, GREEN): [YELLOW, BLUE, RED, ORANGE],    # 21
+        (ORANGE, GREEN): [RED, BLUE, WHITE, YELLOW],    # 22
+        (YELLOW, GREEN): [WHITE, BLUE, ORANGE, RED],    # 23
+        (RED, GREEN): [ORANGE, BLUE, YELLOW, WHITE]     # 24
+    }
+
+    CUBE = [
+        [[WHITE for _ in range(3)] for _ in range(3)],
+        [[RED for _ in range(3)] for _ in range(3)],
+        [[GREEN for _ in range(3)] for _ in range(3)],
+        [[ORANGE for _ in range(3)] for _ in range(3)],
+        [[BLUE for _ in range(3)] for _ in range(3)],
+        [[YELLOW for _ in range(3)] for _ in range(3)]
+    ]
+
+    MOVES = ["X", "X_p", "Y", "Y_p", "Z", "Z_p", "R", "R_p", "L", "L_p", "U", "U_p", "D", "D_p", "F", "F_p", "B", "B_p"]
 
     class Orientation(object):
 
@@ -11,29 +59,22 @@ class Rubik(object):
             self.__infer_other_faces__()
 
         def __infer_other_faces__(self):
-            other_faces = utils.CONFIGURATIONS[(self.front, self.top)]
+            other_faces = Rubik.CONFIGURATIONS[(self.front, self.top)]
             self.back = other_faces[0]
             self.bottom = other_faces[1]
             self.left = other_faces[2]
             self.right = other_faces[3]
 
         def __str__(self):
-            return (f"|\t- Front (F): {utils.COLOR_LEGEND[self.front]} ({self.front})\t\t\t\t\t\t\t|\n"
-                    f"|\t- Top (U): {utils.COLOR_LEGEND[self.top]} ({self.top})\t\t\t\t\t\t\t|\n"
-                    f"|\t- Back (B): {utils.COLOR_LEGEND[self.back]} ({self.back})\t\t\t\t\t\t\t|\n"
-                    f"|\t- Bottom (D): {utils.COLOR_LEGEND[self.bottom]} ({self.bottom})\t\t\t\t\t\t|\n"
-                    f"|\t- Left (L): {utils.COLOR_LEGEND[self.left]} ({self.left})\t\t\t\t\t\t\t|\n"
-                    f"|\t- Right (R): {utils.COLOR_LEGEND[self.right]} ({self.right})\t\t\t\t\t\t\t|")
+            return (f"|\t- Front (F): {Rubik.COLOR_LEGEND[self.front]} ({self.front})\t\t\t\t\t\t\t|\n"
+                    f"|\t- Top (U): {Rubik.COLOR_LEGEND[self.top]} ({self.top})\t\t\t\t\t\t\t|\n"
+                    f"|\t- Back (B): {Rubik.COLOR_LEGEND[self.back]} ({self.back})\t\t\t\t\t\t\t|\n"
+                    f"|\t- Bottom (D): {Rubik.COLOR_LEGEND[self.bottom]} ({self.bottom})\t\t\t\t\t\t|\n"
+                    f"|\t- Left (L): {Rubik.COLOR_LEGEND[self.left]} ({self.left})\t\t\t\t\t\t\t|\n"
+                    f"|\t- Right (R): {Rubik.COLOR_LEGEND[self.right]} ({self.right})\t\t\t\t\t\t\t|")
 
     def __init__(self):
-        self.cube = [
-            [[utils.WHITE for _ in range(3)] for _ in range(3)],
-            [[utils.RED for _ in range(3)] for _ in range(3)],
-            [[utils.GREEN for _ in range(3)] for _ in range(3)],
-            [[utils.ORANGE for _ in range(3)] for _ in range(3)],
-            [[utils.BLUE for _ in range(3)] for _ in range(3)],
-            [[utils.YELLOW for _ in range(3)] for _ in range(3)]
-        ]
+        self.cube = Rubik.CUBE
         self.__scramble__()
 
     def __str__(self):
@@ -121,8 +162,8 @@ class Rubik(object):
         """
         Applies a scramble algorithm starting from the green face on the front and the white face on the top.
         """
-        self.front = utils.GREEN
-        self.top = utils.WHITE
+        self.front = Rubik.GREEN
+        self.top = Rubik.WHITE
         self.orientation = self.Orientation(self.front, self.top)
         self.__D__()
         self.__D__()
@@ -204,6 +245,14 @@ class Rubik(object):
     - B: rotate the back face -90 degrees on the Z axis
     - B_p: rotate the back face 90 degrees on the Z axis
     """
+
+    def do(self, move_name):
+        """
+        Method called by outside this class
+        :param move_name: Name of the move that has to be performed.
+        """
+        move = getattr(self, f"__{move_name}__")
+        move()
 
     # Utility methods
 
