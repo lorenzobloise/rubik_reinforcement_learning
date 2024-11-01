@@ -1,4 +1,5 @@
 import copy
+import random
 
 class Rubik(object):
 
@@ -41,15 +42,16 @@ class Rubik(object):
     }
 
     CUBE = [
-        [[WHITE for _ in range(3)] for _ in range(3)],
-        [[RED for _ in range(3)] for _ in range(3)],
-        [[GREEN for _ in range(3)] for _ in range(3)],
-        [[ORANGE for _ in range(3)] for _ in range(3)],
-        [[BLUE for _ in range(3)] for _ in range(3)],
-        [[YELLOW for _ in range(3)] for _ in range(3)]
+        [[0 for _ in range(3)] for _ in range(3)],
+        [[1 for _ in range(3)] for _ in range(3)],
+        [[2 for _ in range(3)] for _ in range(3)],
+        [[3 for _ in range(3)] for _ in range(3)],
+        [[4 for _ in range(3)] for _ in range(3)],
+        [[5 for _ in range(3)] for _ in range(3)]
     ]
 
-    MOVES = ["X", "X_p", "Y", "Y_p", "Z", "Z_p", "R", "R_p", "L", "L_p", "U", "U_p", "D", "D_p", "F", "F_p", "B", "B_p"]
+    WHOLE_CUBE_ROTATIONS = ["X", "X_p", "Y", "Y_p", "Z", "Z_p"]
+    FACE_ROTATIONS = ["R", "R_p", "L", "L_p", "U", "U_p", "D", "D_p", "F", "F_p", "B", "B_p"]
 
     class Orientation(object):
 
@@ -75,7 +77,9 @@ class Rubik(object):
 
     def __init__(self):
         self.cube = Rubik.CUBE
-        self.__scramble__()
+        self.front = Rubik.GREEN
+        self.top = Rubik.WHITE
+        self.orientation = self.Orientation(self.front, self.top)
 
     def __str__(self):
         return (f" ___________________________________________________ \n"
@@ -158,48 +162,39 @@ class Rubik(object):
         s += '|              |_________|                          |'
         return s
 
-    def __scramble__(self): # TODO generate random scramble
+    def scramble(self): # TODO: generate random scrambles
         """
-        Applies a scramble algorithm starting from the green face on the front and the white face on the top.
+        Applies a hand scramble algorithm starting from the white face on the front and the orange face on the top.
         """
-        self.front = Rubik.GREEN
-        self.top = Rubik.WHITE
+        self.front = Rubik.WHITE
+        self.top = Rubik.ORANGE
         self.orientation = self.Orientation(self.front, self.top)
-        self.__D__()
-        self.__D__()
         self.__U__()
-        self.__F__()
-        self.__F__()
+        self.__R__()
+        self.__R__()
+        self.__B__()
+        self.__B__()
+        self.__R__()
+        self.__R__()
+        self.__L__()
+        self.__L__()
+        self.__B_p__()
+        self.__U__()
+        self.__U__()
+        self.__D__()
+        self.__D__()
+        self.__R_p__()
+        self.__U__()
+        self.__D_p__()
+        self.__R__()
+        self.__B__()
+        self.__D__()
+        self.__B__()
+        self.__R__()
         self.__D_p__()
         self.__B__()
-        self.__B__()
-        self.__F__()
-        self.__U__()
-        self.__L_p__()
-        self.__B_p__()
-        self.__U__()
-        self.__U__()
-        self.__R__()
-        self.__U_p__()
-        self.__B_p__()
-        self.__F_p__()
-        self.__R__()
-        self.__R__()
-        self.__F__()
-        self.__F__()
-        self.__B_p__()
-        self.__L_p__()
-        self.__R__()
-        self.__R__()
-        self.__B__()
-        self.__B__()
-        self.__U__()
-        self.__U__()
-        self.__B_p__()
-        self.__U__()
-        self.__B_p__()
-        self.__D__()
-        self.__D__()
+        self.__L__()
+        self.__L__()
 
     """
     MOVES
