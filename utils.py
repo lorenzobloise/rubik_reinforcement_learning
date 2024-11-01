@@ -6,6 +6,7 @@ BLUE = 4
 YELLOW = 5
 
 COLORS = [WHITE, RED, GREEN, ORANGE, BLUE, YELLOW]
+COLOR_LEGEND = ["WHITE", "RED", "GREEN", "ORANGE", "BLUE", "YELLOW"]
 
 CONFIGURATIONS = {
     # (front, top): [back, bottom, left, right]     # n

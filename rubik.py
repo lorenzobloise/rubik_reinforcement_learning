@@ -1,4 +1,3 @@
-import random
 import utils
 import copy
 
@@ -19,7 +18,12 @@ class Rubik(object):
             self.right = other_faces[3]
 
         def __str__(self):
-            return f"- Front: {self.front},\n- Top: {self.top},\n- Back: {self.back},\n- Bottom: {self.bottom},\n- Left: {self.left},\n- Right: {self.right}"
+            return (f"|\t- Front (F): {utils.COLOR_LEGEND[self.front]} ({self.front})\t\t\t\t\t\t\t|\n"
+                    f"|\t- Top (U): {utils.COLOR_LEGEND[self.top]} ({self.top})\t\t\t\t\t\t\t|\n"
+                    f"|\t- Back (B): {utils.COLOR_LEGEND[self.back]} ({self.back})\t\t\t\t\t\t\t|\n"
+                    f"|\t- Bottom (D): {utils.COLOR_LEGEND[self.bottom]} ({self.bottom})\t\t\t\t\t\t|\n"
+                    f"|\t- Left (L): {utils.COLOR_LEGEND[self.left]} ({self.left})\t\t\t\t\t\t\t|\n"
+                    f"|\t- Right (R): {utils.COLOR_LEGEND[self.right]} ({self.right})\t\t\t\t\t\t\t|")
 
     def __init__(self):
         self.cube = [
@@ -33,7 +37,13 @@ class Rubik(object):
         self.__scramble__()
 
     def __str__(self):
-        return f"--------------------\nCube:\n{self.__str_cube__()}\n--------------------\nOrientation:\n{self.orientation}"
+        return (f" ___________________________________________________ \n"
+                f"|\tCube:\t\t\t\t\t\t\t\t\t\t\t|\n"
+                f"{self.__str_cube__()}\n"
+                f"|---------------------------------------------------|\n"
+                f"|\tOrientation:\t\t\t\t\t\t\t\t\t|\n"
+                f"{self.orientation}\n"
+                f"|___________________________________________________|")
 
     def __str_cube__(self):
         front = self.orientation.front
@@ -65,46 +75,46 @@ class Rubik(object):
                    |    D    |
                    |_________|
         """
-        s += '\t\t\t'
+        s += '|\t\t\t\t'
         s += f"{self.cube[top][0][0]}\t{self.cube[top][0][1]}\t{self.cube[top][0][2]}"
-        s += '\t\t\t\t\t\t\n'
-        s += '\t\t\t'
+        s += '\t\t\t\t\t\t\t|\n'
+        s += '|\t\t\t\t'
         s += f"{self.cube[top][1][0]}\t{self.cube[top][1][1]}\t{self.cube[top][1][2]}"
-        s += '\t\t\t\t\t\t\n'
-        s += '\t\t\t'
+        s += '\t\t\t\t\t\t\t|\n'
+        s += '|\t\t\t\t'
         s += f"{self.cube[top][2][0]}\t{self.cube[top][2][1]}\t{self.cube[top][2][2]}"
-        s += '\t\t\t\t\t\t\n'
-        s += f"{self.cube[left][0][0]}\t{self.cube[left][0][1]}\t{self.cube[left][0][2]}\t"
+        s += '\t\t\t\t\t\t\t|\n'
+        s += f"|\t{self.cube[left][0][0]}\t{self.cube[left][0][1]}\t{self.cube[left][0][2]}\t"
         s += f"{self.cube[front][0][0]}\t{self.cube[front][0][1]}\t{self.cube[front][0][2]}\t"
         s += f"{self.cube[right][0][0]}\t{self.cube[right][0][1]}\t{self.cube[right][0][2]}\t"
-        s += f"{self.cube[back][0][0]}\t{self.cube[back][0][1]}\t{self.cube[back][0][2]}\t\n"
-        s += f"{self.cube[left][1][0]}\t{self.cube[left][1][1]}\t{self.cube[left][1][2]}\t"
+        s += f"{self.cube[back][0][0]}\t{self.cube[back][0][1]}\t{self.cube[back][0][2]}\t|\n"
+        s += f"|\t{self.cube[left][1][0]}\t{self.cube[left][1][1]}\t{self.cube[left][1][2]}\t"
         s += f"{self.cube[front][1][0]}\t{self.cube[front][1][1]}\t{self.cube[front][1][2]}\t"
         s += f"{self.cube[right][1][0]}\t{self.cube[right][1][1]}\t{self.cube[right][1][2]}\t"
-        s += f"{self.cube[back][1][0]}\t{self.cube[back][1][1]}\t{self.cube[back][1][2]}\t\n"
-        s += f"{self.cube[left][2][0]}\t{self.cube[left][2][1]}\t{self.cube[left][2][2]}\t"
+        s += f"{self.cube[back][1][0]}\t{self.cube[back][1][1]}\t{self.cube[back][1][2]}\t|\n"
+        s += f"|\t{self.cube[left][2][0]}\t{self.cube[left][2][1]}\t{self.cube[left][2][2]}\t"
         s += f"{self.cube[front][2][0]}\t{self.cube[front][2][1]}\t{self.cube[front][2][2]}\t"
         s += f"{self.cube[right][2][0]}\t{self.cube[right][2][1]}\t{self.cube[right][2][2]}\t"
-        s += f"{self.cube[back][2][0]}\t{self.cube[back][2][1]}\t{self.cube[back][2][2]}\t\n"
-        s += '\t\t\t'
+        s += f"{self.cube[back][2][0]}\t{self.cube[back][2][1]}\t{self.cube[back][2][2]}\t|\n"
+        s += '|\t\t\t\t'
         s += f"{self.cube[bottom][0][0]}\t{self.cube[bottom][0][1]}\t{self.cube[bottom][0][2]}"
-        s += '\t\t\t\t\t\t\n'
-        s += '\t\t\t'
+        s += '\t\t\t\t\t\t\t|\n'
+        s += '|\t\t\t\t'
         s += f"{self.cube[bottom][1][0]}\t{self.cube[bottom][1][1]}\t{self.cube[bottom][1][2]}"
-        s += '\t\t\t\t\t\t\n'
-        s += '\t\t\t'
+        s += '\t\t\t\t\t\t\t|\n'
+        s += '|\t\t\t\t'
         s += f"{self.cube[bottom][2][0]}\t{self.cube[bottom][2][1]}\t{self.cube[bottom][2][2]}"
-        s += '\t\t\t\t\t\t\n'
-        s += '            _________\n'
-        s += '           |         |\n'
-        s += '           |    U    |\n'
-        s += ' __________|_________|_____________________\n'
-        s += '|          |         |          |          |\n'
-        s += '|     L    |    F    |     R    |     B    |\n'
-        s += '|__________|_________|__________|__________|\n'
-        s += '           |         |\n'
-        s += '           |    D    |\n'
-        s += '           |_________|'
+        s += '\t\t\t\t\t\t\t|\n'
+        s += '|               _________                           |\n'
+        s += '|              |         |                          |\n'
+        s += '|              |    U    |                          |\n'
+        s += '|    __________|_________|_____________________     |\n'
+        s += '|   |          |         |          |          |    |\n'
+        s += '|   |     L    |    F    |     R    |     B    |    |\n'
+        s += '|   |__________|_________|__________|__________|    |\n'
+        s += '|              |         |                          |\n'
+        s += '|              |    D    |                          |\n'
+        s += '|              |_________|                          |'
         return s
 
     def __scramble__(self): # TODO generate random scramble
